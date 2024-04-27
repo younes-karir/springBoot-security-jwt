@@ -45,7 +45,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if(authHeader == null || !authHeader.startsWith("Bearer ")){
             if(!request.getRequestURI().startsWith("/auth/"))
                 throw new EmptyTokenFieldException("JWT string is empty");
-
             filterChain.doFilter(request,response);
             return;
         }
