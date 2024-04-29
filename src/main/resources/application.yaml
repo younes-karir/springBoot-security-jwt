@@ -1,13 +1,13 @@
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/spring-security
+    url: jdbc:mariadb://localhost:3306/spring-security-auditing
     username: root
     password:
   
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     generate-ddl: true
     properties:
       hibernate:
@@ -23,6 +23,6 @@ application:
   security:
     jwt:
       secret-key: 763151654a285942553b587d5f5753445b2f66426b285748414b575149
-      expiration: 60000
+      expiration: 600000
       refresh-token:
         expiration: 60480000
