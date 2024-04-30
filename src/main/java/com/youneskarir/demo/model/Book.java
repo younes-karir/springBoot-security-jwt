@@ -26,7 +26,17 @@ public class Book {
     private Integer id;
     private String author;
     private String isbn;
-    
+
+    @CreatedBy
+    @Column(
+            nullable = false,
+            updatable = false
+    )
+    private Integer createdBy;
+
+    @LastModifiedBy
+    @Column(insertable = false)
+    private Integer lastModifiedBy;
     
     @CreatedDate
     @Column(
@@ -38,4 +48,6 @@ public class Book {
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate;
+
+
 }
