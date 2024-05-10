@@ -17,11 +17,10 @@ public class BookController {
     private final BookService service;
 
     @PostMapping
-    public ResponseEntity<?> save(
+    public Book save(
             @RequestBody BookRequest request
     ) {
-        service.save(request);
-        return ResponseEntity.accepted().build();
+        return service.save(request);
     }
 
     @GetMapping
