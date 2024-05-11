@@ -1,7 +1,9 @@
 package com.youneskarir.demo.advice;
 
 
+import com.youneskarir.demo.advice.custom.ElementExistException;
 import com.youneskarir.demo.advice.custom.EmptyTokenFieldException;
+import com.youneskarir.demo.advice.custom.NotValidEnumValueException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -25,14 +27,20 @@ import java.util.Map;
 @RestControllerAdvice
 public class ExceptionHandle {
     
-    @ExceptionHandler(
-            MethodArgumentNotValidException.class
-    )
-    public ResponseEntity<Object> handleValidation(MethodArgumentNotValidException exception){
+    @ExceptionHandler({
+            MethodArgumentNotValidException.class,
+            ElementExistException.class
+    })
+    public ResponseEntity<Object> handleValidation(Exception exception){
         Map<String,String> errors = new HashMap<>();
-        exception.getBindingResult().getFieldErrors().forEach(
-                item -> errors.put(item.getField(), item.getDefaultMessage())
+        if(exception instanceof MethodArgumentNotValidException ex)
+            ex.getBindingResult().getFieldErrors().forEach(
+                    item -> errors.put(item.getField(), item.getDefaultMessage())
             );
+
+        if(exception instanceof ElementExistException ex)
+            errors.put("email", ex.getMessage());
+
         return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
     }
 
@@ -53,8 +61,15 @@ public class ExceptionHandle {
             return ProblemDetail
                     .forStatusAndDetail(HttpStatusCode
                             .valueOf(400),"Unsupported media type or other read error");
-        } else {
+        } else if(ex.getMessage().contains("not one of the values accepted for Enum class"))
+        {
+            return ProblemDetail
+                    .forStatusAndDetail(HttpStatusCode
+                            .valueOf(400),"not one of the values accepted for Enum");
+        }
+        else {
             // Handle other HttpMessageNotReadableException cases
+            System.out.println(ex.getMessage());
             return ProblemDetail
                     .forStatusAndDetail(HttpStatusCode
                             .valueOf(400),"Other HttpMessageNotReadableException occurred");
