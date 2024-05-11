@@ -18,6 +18,7 @@ public class EnumNamePatternValidator implements ConstraintValidator<EnumNamePat
         } catch (PatternSyntaxException e) {
             throw new NotValidEnumValueException("Given regex is invalid");
         }
+
     }
 
     @Override
