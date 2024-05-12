@@ -24,7 +24,7 @@ public class RegisterRequest {
     @NotBlank(message = "first name is empty")
     @Size(min = 3,message = "last name less than 3 characters")
     private String lastName;
-    
+
     @NotBlank(message = "email is empty")
     @Email(message = "not valid email format")
     private String email;
@@ -34,6 +34,5 @@ public class RegisterRequest {
     private String password;
 
     @NotNull(message = "user role is empty")
-    @EnumNamePattern(regexp = "USER|MANAGER",message = "enter a valid role: [USER|MANAGER]")
     private Role role;
 }
